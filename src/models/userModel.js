@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { validateEmail, validatePhoneNumber } = require("../utils/validators");
+const { validateEmail, validatePhoneNumber, isValidDate } = require("../utils/validators");
 
 const userSchema = new mongoose.Schema({
   firstname: {
@@ -35,6 +35,13 @@ const userSchema = new mongoose.Schema({
   },
   address: {
     type: String,
+  },
+  birthday: {
+    type: String,
+    validate: {
+      validator: isValidDate,
+      message: props => `${props.value} is not a valid date. Use the format YYYY-MM-DD.`,
+    },
   },
   isAdmin: {
     type: Boolean,
