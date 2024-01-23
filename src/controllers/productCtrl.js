@@ -11,6 +11,8 @@ const createProduct = asyncHandler(async (req, res) => {
   }
 });
 
+// update product
+
 module.exports = {
   createProduct,
 };
