@@ -1,6 +1,6 @@
 const Product = require("../models/product");
 const User = require("../models/userModel");
-const asyncHandler = require("../middlewares/errorHandler");
+const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongoId");
 
 //create a product
