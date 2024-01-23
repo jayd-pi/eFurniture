@@ -4,6 +4,7 @@ const app = express();
 const morgan = require('morgan');
 const port = process.env.PORT || 9000
 const dotenv = require('dotenv').config();
+const { notFound, errorHandler } = require("./middlewares/errorHandler");
 const dbConnect = require('./config/dbConnect');
 const userRouter = require('./routes/userRoutes');
 
@@ -15,7 +16,8 @@ app.use(bodyParser.json());
 
 app.use("/api/v1/user", userRouter);
 
-
+app.use(notFound);
+app.use(errorHandler);
 app.listen(port, ()=>{
     console.log(`App listening on port http://localhost:${port}`);
 })
