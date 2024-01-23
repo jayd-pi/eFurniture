@@ -12,7 +12,22 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 // update product
+const updateProduct = asyncHandler(async(req, res)=> {
+    const { id } = req.params
+    try{
+        const updateProduct = await Product.findByIdAndUpdate(id, req.body, {
+            new: true
+        });
+        res.json(updateProduct);
+    } catch (err) {
+        throw new Error(err);
+    }
+})
+
+
+
 
 module.exports = {
   createProduct,
+  updateProduct
 };
