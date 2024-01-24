@@ -19,6 +19,7 @@ app.use("/api/v1/product", productRouter);
 
 app.use(notFound);
 app.use(errorHandler);
+
 app.listen(port, ()=>{
     console.log(`App listening on port http://localhost:${port}`);
 })

@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+
 const {
   validateEmail,
   validatePhoneNumber,
@@ -26,16 +29,16 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    validate: {
-      validator: validatePhoneNumber,
-      message: (props) =>
-        `${props.value} is not a valid phone number! Must be 9-11 digits positive number.`,
-    },
   },
   mobile: {
     type: String,
     required: true,
     unique: true,
+    validate: {
+      validator: validatePhoneNumber,
+      message: (props) =>
+        `${props.value} is not a valid phone number! Must be 9-11 digits positive number.`,
+    },
   },
   address: {
     type: String,
