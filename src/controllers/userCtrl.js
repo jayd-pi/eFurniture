@@ -193,6 +193,27 @@ const updatedUser = asyncHandler(async (req, res) => {
   }
 });
 
+//block-users
+
+const blockUser = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  validateMongoDbId(id);
+  try {
+    const blockUsr = await User.findByIdAndUpdate(
+      id,
+      {
+        isBlocked: true,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json(blockUsr);
+  } catch (err) {
+    throw new Error(err);
+  }
+});
+
 module.exports = {
   createUser,
   loginUserCtrl,
@@ -202,5 +223,6 @@ module.exports = {
   getallUser,
   getaUser,
   deletedUser,
-  updatedUser
+  updatedUser,
+  blockUser
 };

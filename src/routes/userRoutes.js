@@ -10,7 +10,8 @@ const {
     getallUser,
     getaUser,
     deletedUser,
-    updatedUser
+    updatedUser,
+    blockUser
 } = require("../controllers/userCtrl");
 
 router.post("/register",createUser);
@@ -22,6 +23,9 @@ router.get("/all-users", authMiddleware, isAdmin, getallUser);
 router.get("/:id", authMiddleware, getaUser);
 router.delete("/:id", authMiddleware, isAdmin, deletedUser);
 router.put("/edit-user", authMiddleware, updatedUser);
+
+router.put("/block-user/:id", authMiddleware, isAdmin, blockUser);
+
 
 
 module.exports = router
