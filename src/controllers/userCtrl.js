@@ -132,7 +132,7 @@ const logout = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
   });
-  res.sendStatus(204);
+  res.status(201).json("Logout successful")
 });
 
 //get all users
