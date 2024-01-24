@@ -3,11 +3,14 @@ const router = express.Router();
 const {authMiddleware, isAdmin} = require("../middlewares/authMiddleware")
 const {
     createUser,
-    loginUserCtrl
+    loginUserCtrl,
+    handleRefreshToken
 } = require("../controllers/userCtrl");
 
 router.post("/register",createUser);
 router.post("/login", loginUserCtrl);
 // router.post("/admin-login", loginAdmin);
+router.get("/refresh",handleRefreshToken);
+
 
 module.exports = router

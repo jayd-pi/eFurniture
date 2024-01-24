@@ -91,20 +91,20 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 
 //handle RefreshToken
 
-// const handleRefreshToken = asyncHandler(async (req, res) => {
-//   const cookie = req.cookies;
-//   if (!cookie?.refreshToken) throw new Error("No RefreshToken in Cookie");
-//   const refreshToken = cookie.refreshToken;
-//   const user = await User.findOne({ refreshToken });
-//   if (!user) throw new Error("No refreshToken present in db or not matched");
-//   jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
-//     if (err || user.id != decoded.id) {
-//       throw new Error("There is something wrong with refresh token");
-//     }
-//     const accessToken = generateToken(user?._id);
-//     res.json({ accessToken });
-//   });
-// });
+const handleRefreshToken = asyncHandler(async (req, res) => {
+  const cookie = req.cookies;
+  if (!cookie?.refreshToken) throw new Error("No RefreshToken in Cookie");
+  const refreshToken = cookie.refreshToken;
+  const user = await User.findOne({ refreshToken });
+  if (!user) throw new Error("No refreshToken present in db or not matched");
+  jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
+    if (err || user.id != decoded.id) {
+      throw new Error("There is something wrong with refresh token");
+    }
+    const accessToken = generateToken(user?._id);
+    res.json({ accessToken });
+  });
+});
 
 // logout
 
@@ -135,5 +135,6 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 
 module.exports = {
   createUser,
-  loginUserCtrl
+  loginUserCtrl,
+  handleRefreshToken
 };
