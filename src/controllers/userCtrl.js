@@ -1,9 +1,9 @@
 const User = require("../models/userModel");
-const { generateToken } = require("../config/jwtToken");
-const validateMongoDbId = require("../utils/validateMongoId");
-const { generateRefreshToken } = require("../config/generateRefreshToken");
-const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
+const jwt = require("jsonwebtoken");
+const validateMongoDbId = require("../utils/validateMongoId");
+const { generateToken } = require("../config/jwtToken");
+const { generateRefreshToken } = require("../config/generateRefreshToken");
 
 //Register account
 
@@ -12,12 +12,13 @@ const createUser = asyncHandler(async (req, res) => {
     const { email } = req.body;
     const existingEmail = await User.findOne({ email });
     if (existingEmail) {
-      res.status(400).json({ error: "User with this email already exists" });
+     return res.status(400).json({ error: "User with this email already exists" });
     }
     const newUser = new User(req.body);
     const user = await newUser.save();
     res.status(201).json(user);
   } catch (error) {
+    console.error("Error creating user:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -67,7 +68,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 //     const updateuser = await User.findByIdAndUpdate(
 //       findAdmin.id,
 //       {
-//         refreshToken: refreshToken,
+        // refreshToken: refreshToken,
 //       },
 //       { new: true }
 //     );
