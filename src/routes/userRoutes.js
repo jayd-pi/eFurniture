@@ -11,7 +11,8 @@ const {
     getaUser,
     deletedUser,
     updatedUser,
-    blockUser
+    blockUser,
+    unblockUser
 } = require("../controllers/userCtrl");
 
 router.post("/register",createUser);
@@ -25,6 +26,8 @@ router.delete("/:id", authMiddleware, isAdmin, deletedUser);
 router.put("/edit-user", authMiddleware, updatedUser);
 
 router.put("/block-user/:id", authMiddleware, isAdmin, blockUser);
+router.put("/unblock-user/:id", authMiddleware, isAdmin, unblockUser);
+
 
 
 

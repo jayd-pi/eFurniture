@@ -214,6 +214,27 @@ const blockUser = asyncHandler(async (req, res, next) => {
   }
 });
 
+//unblock-users
+
+const unblockUser = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  validateMongoDbId(id);
+  try {
+    const unblock = await User.findByIdAndUpdate(
+      id,
+      {
+        isBlocked: false,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json("User Unblocked");
+  } catch (err) {
+    throw new Error(err);
+  }
+});
+
 module.exports = {
   createUser,
   loginUserCtrl,
@@ -224,5 +245,6 @@ module.exports = {
   getaUser,
   deletedUser,
   updatedUser,
-  blockUser
+  blockUser,
+  unblockUser
 };
