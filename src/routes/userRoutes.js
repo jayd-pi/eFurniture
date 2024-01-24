@@ -15,7 +15,8 @@ const {
     unblockUser,
     addToCart,
     getUserCart,
-    emptyCart
+    emptyCart,
+    getWishList
 } = require("../controllers/userCtrl");
 
 router.post("/register",createUser);
@@ -30,7 +31,7 @@ router.put("/edit-user", authMiddleware, updatedUser);
 router.post("/cart", authMiddleware, addToCart);
 router.get("/cart", authMiddleware, getUserCart);
 router.delete("/empty-cart", authMiddleware, emptyCart);
-
+router.get("/wishlist", authMiddleware, getWishList);
 
 router.put("/block-user/:id", authMiddleware, isAdmin, blockUser);
 router.put("/unblock-user/:id", authMiddleware, isAdmin, unblockUser);

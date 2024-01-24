@@ -301,6 +301,18 @@ const emptyCart = asyncHandler(async (req, res) => {
   }
 });
 
+//GET wishList
+
+const getWishList = asyncHandler(async (req, res)=>{
+  const { _id } = req.user;
+  try{
+    const getWishList = await User.findById(_id).populate('wistlist');
+    res.json(getWishList);
+  } catch(error){
+    throw new Error(error);
+  }
+})
+
 module.exports = {
   createUser,
   loginUserCtrl,
@@ -315,5 +327,6 @@ module.exports = {
   unblockUser,
   addToCart,
   getUserCart,
-  emptyCart
+  emptyCart,
+  getWishList
 };
