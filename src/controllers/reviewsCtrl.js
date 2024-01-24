@@ -5,7 +5,7 @@ const validateMongoDbId = require("../utils/validateMongoId");
 const createReviews = asyncHandler(async (req, res) => {
   try {
     const { idProduct } = req.params;
-    const reviewData = { ...req.body, productId: idProduct };
+    const reviewData = { ...req.body, idProduct: idProduct };
     const createdReview = await Review.create(reviewData);
     res.json(createdReview);
   } catch (err) {
@@ -20,7 +20,7 @@ const getReviews = asyncHandler(async (req, res) => {
   const { idProduct } = req.params;
 
   try {
-    const reviews = await Review.find({ productId: idProduct });
+    const reviews = await Review.find({ idProduct: idProduct });
     if (reviews.length === 0) {
       return res
         .status(404)
