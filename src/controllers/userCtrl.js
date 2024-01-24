@@ -144,11 +144,26 @@ const getallUser = asyncHandler(async (req, res) => {
   }
 });
 
+//get single user
+
+const getaUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  validateMongoDbId(id);
+  try {
+    const getaUser = await User.findById(id);
+    const { password, ...info } = getaUser._doc;
+    res.json(info);
+  } catch (err) {
+    throw new Error(err);
+  }
+});
+
 module.exports = {
   createUser,
   loginUserCtrl,
   loginAdmin,
   logout,
   handleRefreshToken,
-  getallUser
+  getallUser,
+  getaUser
 };

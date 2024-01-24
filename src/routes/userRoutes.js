@@ -7,7 +7,8 @@ const {
     loginAdmin,
     handleRefreshToken,
     logout,
-    getallUser
+    getallUser,
+    getaUser
 } = require("../controllers/userCtrl");
 
 router.post("/register",createUser);
@@ -16,7 +17,6 @@ router.post("/admin-login", loginAdmin);
 router.get("/refresh",handleRefreshToken);
 router.get("/logout", logout);
 router.get("/all-users", authMiddleware, isAdmin, getallUser);
-
-
+router.get("/:id", authMiddleware, getaUser);
 
 module.exports = router
