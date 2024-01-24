@@ -9,7 +9,7 @@ const dbConnect = require('./config/dbConnect');
 const userRouter = require('./routes/userRoutes');
 const productRouter = require('./routes/productRoutes');
 
-dbConnect();
+dbConnect.connectdbConnect;
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(bodyParser.json());
