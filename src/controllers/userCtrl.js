@@ -133,10 +133,22 @@ const logout = asyncHandler(async (req, res) => {
   res.sendStatus(204);
 });
 
+//get all users
+
+const getallUser = asyncHandler(async (req, res) => {
+  try {
+    const getUsers = await User.find();
+    res.json(getUsers);
+  } catch (err) {
+    throw new Error(err);
+  }
+});
+
 module.exports = {
   createUser,
   loginUserCtrl,
   loginAdmin,
   logout,
-  handleRefreshToken
+  handleRefreshToken,
+  getallUser
 };
