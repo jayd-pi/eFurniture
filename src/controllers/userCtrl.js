@@ -171,6 +171,28 @@ const deletedUser = asyncHandler(async (req, res) => {
   }
 });
 
+const updatedUser = asyncHandler(async (req, res) => {
+  const { _id } = req.user; // user login already
+  validateMongoDbId(_id);
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      _id,
+      {
+        firstname: req?.body?.firstname,
+        lastname: req?.body?.lastname,
+        email: req?.body?.email,
+        mobile: req?.body?.mobile,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json(updatedUser);
+  } catch (err) {
+    throw new Error(err);
+  }
+});
+
 module.exports = {
   createUser,
   loginUserCtrl,
@@ -179,5 +201,6 @@ module.exports = {
   handleRefreshToken,
   getallUser,
   getaUser,
-  deletedUser
+  deletedUser,
+  updatedUser
 };

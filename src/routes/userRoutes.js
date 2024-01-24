@@ -8,7 +8,9 @@ const {
     handleRefreshToken,
     logout,
     getallUser,
-    getaUser
+    getaUser,
+    deletedUser,
+    updatedUser
 } = require("../controllers/userCtrl");
 
 router.post("/register",createUser);
@@ -19,6 +21,7 @@ router.get("/logout", logout);
 router.get("/all-users", authMiddleware, isAdmin, getallUser);
 router.get("/:id", authMiddleware, getaUser);
 router.delete("/:id", authMiddleware, isAdmin, deletedUser);
+router.put("/edit-user", authMiddleware, updatedUser);
 
 
 module.exports = router
