@@ -18,5 +18,7 @@ router.get("/refresh",handleRefreshToken);
 router.get("/logout", logout);
 router.get("/all-users", authMiddleware, isAdmin, getallUser);
 router.get("/:id", authMiddleware, getaUser);
+router.delete("/:id", authMiddleware, isAdmin, deletedUser);
+
 
 module.exports = router
