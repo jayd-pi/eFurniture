@@ -5,13 +5,16 @@ const {
     createUser,
     loginUserCtrl,
     loginAdmin,
-    handleRefreshToken
+    handleRefreshToken,
+    logout
 } = require("../controllers/userCtrl");
 
 router.post("/register",createUser);
 router.post("/login", loginUserCtrl);
 router.post("/admin-login", loginAdmin);
 router.get("/refresh",handleRefreshToken);
+router.get("/logout", logout);
+
 
 
 module.exports = router
