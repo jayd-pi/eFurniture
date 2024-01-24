@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
-const Cart = require('../models/cartModel')
+const Cart = require('../models/cartModel');
+const Product = require("../models/product")
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const validateMongoDbId = require("../utils/validateMongoId");
