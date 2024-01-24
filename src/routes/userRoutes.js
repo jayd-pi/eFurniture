@@ -4,12 +4,13 @@ const {authMiddleware, isAdmin} = require("../middlewares/authMiddleware")
 const {
     createUser,
     loginUserCtrl,
+    loginAdmin,
     handleRefreshToken
 } = require("../controllers/userCtrl");
 
 router.post("/register",createUser);
 router.post("/login", loginUserCtrl);
-// router.post("/admin-login", loginAdmin);
+router.post("/admin-login", loginAdmin);
 router.get("/refresh",handleRefreshToken);
 
 
