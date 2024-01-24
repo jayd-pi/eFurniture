@@ -5,13 +5,15 @@ const {
     updateProduct,
     deleteProduct,
     getaProduct,
-    getAllProduct
+    getAllProduct,
+    addToWishlist
 } = require("../controllers/productCtrl")
 const router = express.Router();
 
 router.post('/', authMiddleware, isAdmin, createProduct);
 router.put('/:id', authMiddleware, isAdmin, updateProduct);
 router.delete('/:id', authMiddleware, isAdmin, deleteProduct);
+router.put("/wishlist", authMiddleware, addToWishlist);
 router.get('/:id', getaProduct);
 router.get('/', getAllProduct);
 
