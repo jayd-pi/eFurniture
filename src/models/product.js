@@ -26,8 +26,8 @@ const productSchema = new mongoose.Schema({
       min: 0,
     },
     images: {
-      type: Array,
-      default: [],
+      type: String,
+      // default: [],
       validate: {
         validator: isValidImageSize,
         message: "Image size must be less than 10MB.",
