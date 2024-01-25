@@ -246,51 +246,21 @@ const addToCart = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   validateMongoDbId(_id);
   try {
-    let products = [];
     const user = await User.findById(_id);
-
-    // Lấy giỏ hàng của người dùng
-    const cartFromDb = await Cart.findOne({ orderby: user._id });
-
-    // Nếu giỏ hàng không tồn tại, tạo mới
-    if (!cartFromDb) {
-      for (let i = 0; i < cart.length; i++) {
-        let object = {};
-        object.product = cart[i]._id;
-        object.count = cart[i].count;
-        let getPrice = await Product.findById(cart[i]._id)
-          .select("price")
-          .exec();
-        object.price = getPrice.price;
-        products.push(object);
-      }
-      let cartTotal = 0;
-      for (let i = 0; i < products.length; i++) {
-        cartTotal = cartTotal + products[i].price * products[i].count;
-      }
-      let newCart = await new Cart({
-        products,
-        cartTotal,
-        orderby: user?._id,
-      }).save();
-      res.json(newCart);
-      return;
+    // check if user already have product in cart
+    let alreadyExistCart = await Cart.findOne({ orderby: user._id });
+    if (!alreadyExistCart) {
+      alreadyExistCart = new Cart({ orderby: user._id });
     }
-
-    // Nếu giỏ hàng tồn tại, cập nhật sản phẩm
     for (let i = 0; i < cart.length; i++) {
-      let productToUpdate = cartFromDb.products.find(
-        (product) => product.product === cart[i]._id
+      const existingProductIndex = alreadyExistCart.products.findIndex(
+        (p) => p.product.toString() === cart[i]._id
       );
-      if (productToUpdate) {
-        productToUpdate.count += cart[i].count;
-        let cartTotal = 0;
-        for (let j = 0; j < cartFromDb.products.length; j++) {
-          cartTotal +=
-            cartFromDb.products[j].price * cartFromDb.products[j].count;
-        }
-        cartFromDb.cartTotal = cartTotal;
+      if (existingProductIndex >= 0) {
+        // product already exists in the cart, update the quantity
+        alreadyExistCart.products[existingProductIndex].count += cart[i].count;
       } else {
+        // new product, add to cart
         let object = {};
         object.product = cart[i]._id;
         object.count = cart[i].count;
@@ -299,11 +269,18 @@ const addToCart = asyncHandler(async (req, res) => {
           .select("price")
           .exec();
         object.price = getPrice.price;
-        products.push(object);
+        alreadyExistCart.products.push(object);
       }
     }
-    await cartFromDb.save();
-    res.json(cartFromDb);
+    let cartTotal = 0;
+    for (let i = 0; i < alreadyExistCart.products.length; i++) {
+      cartTotal =
+        cartTotal +
+        alreadyExistCart.products[i].price * alreadyExistCart.products[i].count;
+    }
+    alreadyExistCart.cartTotal = cartTotal;
+    let newCart = await alreadyExistCart.save();
+    res.json(newCart);
   } catch (error) {
     throw new Error(error);
   }
