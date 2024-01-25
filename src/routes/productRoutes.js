@@ -10,7 +10,7 @@ const {
 } = require("../controllers/productCtrl")
 const router = express.Router();
 
-router.post('/', authMiddleware, isAdmin, createProduct);
+router.post('/create', authMiddleware, isAdmin, createProduct);
 router.put('/:id', authMiddleware, isAdmin, updateProduct);
 router.delete('/:id', authMiddleware, isAdmin, deleteProduct);
 router.put("/wishlist", authMiddleware, addToWishlist);
