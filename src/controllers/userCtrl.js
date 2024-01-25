@@ -307,7 +307,7 @@ const emptyCart = asyncHandler(async (req, res) => {
 const getWishList = asyncHandler(async (req, res)=>{
   const { _id } = req.user;
   try{
-    const getWishList = await User.findById(_id).populate('wistlist');
+    const getWishList = await User.findById(_id).populate('wishlist');
     res.json(getWishList);
   } catch(error){
     throw new Error(error);
