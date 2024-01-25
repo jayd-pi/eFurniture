@@ -6,6 +6,9 @@ const jwt = require("jsonwebtoken");
 const validateMongoDbId = require("../utils/validateMongoId");
 const { generateToken } = require("../config/jwtToken");
 const { generateRefreshToken } = require("../config/generateRefreshToken");
+const Coupon = require("../models/couponModel");
+const Order = require("../models/orderModel")
+const uniqid = require("uniqid");
 
 //Register account
 
@@ -392,6 +395,7 @@ const createOrder = asyncHandler(async (req, res) => {
     const updated = await Product.bulkWrite(update, {});
     res.json({ message: "success" });
   } catch (error) {
+    console.log(error.message)
     throw new Error(error);
   }
 });

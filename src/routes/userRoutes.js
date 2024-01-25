@@ -26,6 +26,8 @@ const {
 router.post("/register",createUser);
 router.post("/login", loginUserCtrl);
 router.post("/admin-login", loginAdmin);
+router.post("/cart", authMiddleware, addToCart);
+router.get("/cart", authMiddleware, getUserCart);
 router.get("/refresh",handleRefreshToken);
 router.get("/logout", logout);
 router.get("/wishlist", authMiddleware, getWishList);
@@ -35,11 +37,6 @@ router.delete("/:id", authMiddleware, isAdmin, deletedUser);
 router.get("/all-users", authMiddleware, isAdmin, getallUser);
 
 router.put("/edit-user", authMiddleware, updatedUser);
-router.post("/cart", authMiddleware, addToCart);
-router.get("/cart", authMiddleware, getUserCart);
-router.get("/refresh",handleRefreshToken);
-router.get("/logout", logout);
-router.get("/wishlist", authMiddleware, getWishList);
 router.post("/cart/applyCoupon",authMiddleware, applyCoupon );
 router.post("/cart/create-order", authMiddleware, createOrder);
 router.put("/:id", authMiddleware, deleteOrder);
