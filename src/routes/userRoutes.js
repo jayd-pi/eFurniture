@@ -16,11 +16,13 @@ const {
     addToCart,
     getUserCart,
     emptyCart,
-    getWishList
+    getWishList,
+    updatePassword
 } = require("../controllers/userCtrl");
 
 router.post("/register",createUser);
 router.post("/login", loginUserCtrl);
+router.put("/password", authMiddleware, updatePassword);
 router.post("/admin-login", loginAdmin);
 router.post("/cart", authMiddleware, addToCart);
 router.get("/cart", authMiddleware, getUserCart);
