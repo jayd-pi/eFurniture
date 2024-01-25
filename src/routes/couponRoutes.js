@@ -7,7 +7,7 @@ const {
     getaCoupon,
     getAllCoupon,
    
-} = require("../controllers/productCtrl")
+} = require("../controllers/couponCtrl")
 const router = express.Router();
 
 router.post('/', authMiddleware, isAdmin, createCoupon);

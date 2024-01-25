@@ -8,14 +8,17 @@ const { notFound, errorHandler } = require("./middlewares/errorHandler");
 const dbConnect = require('./config/dbConnect');
 const userRouter = require('./routes/userRoutes');
 const productRouter = require('./routes/productRoutes');
+const couponRouter = require('./routes/couponRoutes');
 
-dbConnect.connectdbConnect;
+
+dbConnect();
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(bodyParser.json());
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/product", productRouter);
+app.use("/api/v1/coupon", couponRouter);
 
 app.use(notFound);
 app.use(errorHandler);

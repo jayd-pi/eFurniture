@@ -5,8 +5,13 @@ dotenv.config();
 
 const dbConnect = async () => {
   try {
-    const con = await mongoose.connect(process.env.MONGODB_URL);
-    if (con) console.log("connect successfully");
+    mongoose.set('strictQuery', false);
+    await mongoose.connect(process.env.MONGODB_URL, {
+      useNewUrlParser: true, 
+      useUnifiedTopology: true,
+      
+    });
+    console.log("connect successfully");
   } catch (error) {
     console.log("Failed", error);
   }

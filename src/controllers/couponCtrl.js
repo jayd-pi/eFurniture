@@ -6,7 +6,7 @@ const validateMongoDbId = require("../utils/validateMongoId");
 //create a coupon
 const createCoupon = asyncHandler(async (req, res) => {
   try {
-    const createCoupon = await Product.create(req.body);
+    const createCoupon = await Coupon.create(req.body);
     res.json(createCoupon);
   } catch (err) {
     throw new Error(err);
@@ -18,7 +18,7 @@ const updateCoupon = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongoDbId(id);
   try {
-    const updateCoupon = await Product.findByIdAndUpdate(id, req.body, {
+    const updateCoupon = await Coupon.findByIdAndUpdate(id, req.body, {
       new: true,
     });
     res.json(updateCoupon);
@@ -32,7 +32,7 @@ const deleteCoupon = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongoDbId(id);
   try {
-    const deleteCoupon = await Product.findByIdAndDelete(id);
+    const deleteCoupon = await Coupon.findByIdAndDelete(id);
     res.json(deleteCoupon);
   } catch (error) {
     throw new Error(error);
