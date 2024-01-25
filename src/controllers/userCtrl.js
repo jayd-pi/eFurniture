@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
-const Cart = require('../models/cartModel')
+const Cart = require("../models/cartModel");
+const Product = require("../models/product");
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const validateMongoDbId = require("../utils/validateMongoId");
@@ -13,7 +14,9 @@ const createUser = asyncHandler(async (req, res) => {
     const { email } = req.body;
     const existingEmail = await User.findOne({ email });
     if (existingEmail) {
-     return res.status(400).json({ error: "User with this email already exists" });
+      return res
+        .status(400)
+        .json({ error: "User with this email already exists" });
     }
     const newUser = new User(req.body);
     const user = await newUser.save();
@@ -131,7 +134,7 @@ const logout = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
   });
-  res.sendStatus(204);
+  res.status(200).json("Logout successful");
 });
 
 //get all users
@@ -243,31 +246,40 @@ const addToCart = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   validateMongoDbId(_id);
   try {
-    let products = [];
     const user = await User.findById(_id);
     // check if user already have product in cart
-    const alreadyExistCart = await Cart.findOne({ orderby: user._id });
-    if (alreadyExistCart) {
-      alreadyExistCart.remove();
+    let alreadyExistCart = await Cart.findOne({ orderby: user._id });
+    if (!alreadyExistCart) {
+      alreadyExistCart = new Cart({ orderby: user._id });
     }
     for (let i = 0; i < cart.length; i++) {
-      let object = {};
-      object.product = cart[i]._id;
-      object.count = cart[i].count;
-      object.color = cart[i].color;
-      let getPrice = await Product.findById(cart[i]._id).select("price").exec();
-      object.price = getPrice.price;
-      products.push(object);
+      const existingProductIndex = alreadyExistCart.products.findIndex(
+        (p) => p.product.toString() === cart[i]._id
+      );
+      if (existingProductIndex >= 0) {
+        // product already exists in the cart, update the quantity
+        alreadyExistCart.products[existingProductIndex].count += cart[i].count;
+      } else {
+        // new product, add to cart
+        let object = {};
+        object.product = cart[i]._id;
+        object.count = cart[i].count;
+        object.color = cart[i].color;
+        let getPrice = await Product.findById(cart[i]._id)
+          .select("price")
+          .exec();
+        object.price = getPrice.price;
+        alreadyExistCart.products.push(object);
+      }
     }
     let cartTotal = 0;
-    for (let i = 0; i < products.length; i++) {
-      cartTotal = cartTotal + products[i].price * products[i].count;
+    for (let i = 0; i < alreadyExistCart.products.length; i++) {
+      cartTotal =
+        cartTotal +
+        alreadyExistCart.products[i].price * alreadyExistCart.products[i].count;
     }
-    let newCart = await new Cart({
-      products,
-      cartTotal,
-      orderby: user?._id,
-    }).save();
+    alreadyExistCart.cartTotal = cartTotal;
+    let newCart = await alreadyExistCart.save();
     res.json(newCart);
   } catch (error) {
     throw new Error(error);
@@ -303,15 +315,15 @@ const emptyCart = asyncHandler(async (req, res) => {
 
 //GET wishList
 
-const getWishList = asyncHandler(async (req, res)=>{
+const getWishList = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  try{
-    const getWishList = await User.findById(_id).populate('wistlist');
+  try {
+    const getWishList = await User.findById(_id).populate("wishlist");
     res.json(getWishList);
-  } catch(error){
+  } catch (error) {
     throw new Error(error);
   }
-})
+});
 
 //Apply Coupon
 
