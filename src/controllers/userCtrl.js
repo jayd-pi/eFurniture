@@ -8,6 +8,7 @@ const { generateRefreshToken } = require("../config/generateRefreshToken");
 
 //Register account
 
+
 const createUser = asyncHandler(async (req, res) => {
   try {
     const { email } = req.body;
@@ -131,7 +132,7 @@ const logout = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
   });
-  res.sendStatus(204);
+  res.status(200).json("Logout successful");
 });
 
 //get all users
@@ -313,6 +314,22 @@ const getWishList = asyncHandler(async (req, res)=>{
   }
 })
 
+//get order
+
+const getOrders = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  validateMongoDbId(_id);
+  try {
+    const userOrders = await Order.findOne({ orderby: _id })
+      .populate("products.product")
+      .populate("orderby")
+      .exec();
+    res.json(userOrders);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 module.exports = {
   createUser,
   loginUserCtrl,
@@ -328,5 +345,6 @@ module.exports = {
   addToCart,
   getUserCart,
   emptyCart,
-  getWishList
+  getWishList,
+  getOrders
 };

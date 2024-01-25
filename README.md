@@ -8,9 +8,11 @@
   4. Huỳnh Nguyễn Tuấn Duy - SE170187
   5. Hoàng Xuân Việt - SE160082
 
-### Lưu ý:
-  - Branch main để chứa các code đã ổn định để devOps build và đưa lên host. Không push code đang phát triển lên branch này. 
-  - Các code đang dev chỉ được push lên branch dev "branch name for each dev".
-    - Để kiểm tra branch hiện tại sử dụng lệnh "git branch"
-    - Để chuyển sang branch khác sử dụng lệnh "git checkout [tên branch]"
-  - Mọi người chú ý CLEAN project trước khi push để xoá các file ko cần thiết, pull request dễ dàng hơn.
+
+### Function URI 
+
+http://localhost:9000/api/v1/user/register        (POST)
+http://localhost:9000/api/v1/user/login           (POST)
+http://localhost:9000/api/v1/user/admin-login     (POST)
+http://localhost:9000/api/v1/user/logout          (GET)
+http://localhost:9000/api/v1/user/orders          (GET)
