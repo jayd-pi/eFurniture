@@ -355,7 +355,6 @@ const applyCoupon = asyncHandler(async (req, res) => {
 });
 
 //create order
-
 const createOrder = asyncHandler(async (req, res) => {
   const { COD, couponApplied } = req.body;
   const { _id } = req.user;
@@ -375,7 +374,7 @@ const createOrder = asyncHandler(async (req, res) => {
       products: userCart.products,
       paymentIntent: {
         id: uniqid(),
-        method: "COD",
+        method: "ABC",
         amount: finalAmout,
         status: "Cash on Delivery",
         created: Date.now(),
@@ -384,16 +383,15 @@ const createOrder = asyncHandler(async (req, res) => {
       orderby: user._id,
       orderStatus: "Cash on Delivery",
     }).save();
-    let update = userCart.products.map((item) => {
-      return {
-        updateOne: {
-          filter: { _id: item.product._id },
-          update: { $inc: { quantity: -item.count, sold: +item.count } },
-        },
-      };
+    let update = userCart.products.map(async (item) => {
+      await Product.updateOne(
+        { _id: item.product },
+        { $inc: { stockQuantity: -item.count } }
+      );
     });
-    const updated = await Product.bulkWrite(update, {});
-    res.json({ message: "success" });
+    // const updated = await Product.bulkWrite(update, {});
+
+    res.json({ order: newOrder, message: "success" });
   } catch (error) {
     console.log(error.message)
     throw new Error(error);
