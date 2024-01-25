@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
-const Cart = require('../models/cartModel');
-const Product = require("../models/product")
+const Cart = require("../models/cartModel");
+const Product = require("../models/product");
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const validateMongoDbId = require("../utils/validateMongoId");
@@ -14,7 +14,9 @@ const createUser = asyncHandler(async (req, res) => {
     const { email } = req.body;
     const existingEmail = await User.findOne({ email });
     if (existingEmail) {
-     return res.status(400).json({ error: "User with this email already exists" });
+      return res
+        .status(400)
+        .json({ error: "User with this email already exists" });
     }
     const newUser = new User(req.body);
     const user = await newUser.save();
@@ -132,7 +134,7 @@ const logout = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
   });
-  res.status(200).json("Logout successful")
+  res.status(200).json("Logout successful");
 });
 
 //get all users
@@ -246,30 +248,62 @@ const addToCart = asyncHandler(async (req, res) => {
   try {
     let products = [];
     const user = await User.findById(_id);
-    // check if user already have product in cart
-    const alreadyExistCart = await Cart.findOne({ orderby: user._id });
-    if (alreadyExistCart) {
-      alreadyExistCart.remove();
+
+    // Lấy giỏ hàng của người dùng
+    const cartFromDb = await Cart.findOne({ orderby: user._id });
+
+    // Nếu giỏ hàng không tồn tại, tạo mới
+    if (!cartFromDb) {
+      for (let i = 0; i < cart.length; i++) {
+        let object = {};
+        object.product = cart[i]._id;
+        object.count = cart[i].count;
+        let getPrice = await Product.findById(cart[i]._id)
+          .select("price")
+          .exec();
+        object.price = getPrice.price;
+        products.push(object);
+      }
+      let cartTotal = 0;
+      for (let i = 0; i < products.length; i++) {
+        cartTotal = cartTotal + products[i].price * products[i].count;
+      }
+      let newCart = await new Cart({
+        products,
+        cartTotal,
+        orderby: user?._id,
+      }).save();
+      res.json(newCart);
+      return;
     }
+
+    // Nếu giỏ hàng tồn tại, cập nhật sản phẩm
     for (let i = 0; i < cart.length; i++) {
-      let object = {};
-      object.product = cart[i]._id;
-      object.count = cart[i].count;
-      object.color = cart[i].color;
-      let getPrice = await Product.findById(cart[i]._id).select("price").exec();
-      object.price = getPrice.price;
-      products.push(object);
+      let productToUpdate = cartFromDb.products.find(
+        (product) => product.product === cart[i]._id
+      );
+      if (productToUpdate) {
+        productToUpdate.count += cart[i].count;
+        let cartTotal = 0;
+        for (let j = 0; j < cartFromDb.products.length; j++) {
+          cartTotal +=
+            cartFromDb.products[j].price * cartFromDb.products[j].count;
+        }
+        cartFromDb.cartTotal = cartTotal;
+      } else {
+        let object = {};
+        object.product = cart[i]._id;
+        object.count = cart[i].count;
+        object.color = cart[i].color;
+        let getPrice = await Product.findById(cart[i]._id)
+          .select("price")
+          .exec();
+        object.price = getPrice.price;
+        products.push(object);
+      }
     }
-    let cartTotal = 0;
-    for (let i = 0; i < products.length; i++) {
-      cartTotal = cartTotal + products[i].price * products[i].count;
-    }
-    let newCart = await new Cart({
-      products,
-      cartTotal,
-      orderby: user?._id,
-    }).save();
-    res.json(newCart);
+    await cartFromDb.save();
+    res.json(cartFromDb);
   } catch (error) {
     throw new Error(error);
   }
@@ -304,15 +338,15 @@ const emptyCart = asyncHandler(async (req, res) => {
 
 //GET wishList
 
-const getWishList = asyncHandler(async (req, res)=>{
+const getWishList = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  try{
-    const getWishList = await User.findById(_id).populate('wishlist');
+  try {
+    const getWishList = await User.findById(_id).populate("wishlist");
     res.json(getWishList);
-  } catch(error){
+  } catch (error) {
     throw new Error(error);
   }
-})
+});
 
 module.exports = {
   createUser,
@@ -329,5 +363,5 @@ module.exports = {
   addToCart,
   getUserCart,
   emptyCart,
-  getWishList
+  getWishList,
 };
