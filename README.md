@@ -8,6 +8,17 @@
   4. Huỳnh Nguyễn Tuấn Duy - SE170187
   5. Hoàng Xuân Việt - SE160082
 
+### Function by T.Anh: SE160559
+1. Create Coupon
+2. Update Coupon
+3. Delete Coupon
+4. Get A Coupon
+5. Get All Coupon  
+6. Apply Coupon
+7. Create Order
+8. Get Order
+9. Delete Order
+
 ### Lưu ý:
   - Branch main để chứa các code đã ổn định để devOps build và đưa lên host. Không push code đang phát triển lên branch này. 
   - Các code đang dev chỉ được push lên branch dev "branch name for each dev".
