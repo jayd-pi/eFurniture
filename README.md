@@ -8,11 +8,14 @@
   4. Huỳnh Nguyễn Tuấn Duy - SE170187
   5. Hoàng Xuân Việt - SE160082
 
-
 ### Function URI 
 
 http://localhost:9000/api/v1/user/register        (POST)
 http://localhost:9000/api/v1/user/login           (POST)
 http://localhost:9000/api/v1/user/admin-login     (POST)
 http://localhost:9000/api/v1/user/logout          (GET)
-http://localhost:9000/api/v1/user/orders          (GET)
+
+
+
+### to use project
+npm i
