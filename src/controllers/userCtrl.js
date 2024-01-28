@@ -64,7 +64,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   // check if user exists or not
   const findAdmin = await User.findOne({ email });
-  if (findAdmin.isAdmin === true) throw new Error("Not Authorised");
+  if (findAdmin.isAdmin !== true) throw new Error("Not Authorised");
   if (findAdmin && (await findAdmin.isPasswordMatched(password))) {
     const refreshToken = await generateRefreshToken(findAdmin?._id);
     const updateuser = await User.findByIdAndUpdate(
@@ -94,7 +94,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
 //handle RefreshToken
 
 const handleRefreshToken = asyncHandler(async (req, res) => {
-  const cookie = req.cookies;
+  const cookie = req.cookies.refreshToken;
   if (!cookie?.refreshToken) throw new Error("No RefreshToken in Cookie");
   const refreshToken = cookie.refreshToken;
   const user = await User.findOne({ refreshToken });
@@ -111,26 +111,8 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
 // logout
 
 const logout = asyncHandler(async (req, res) => {
-  const cookie = req.cookies;
-  if (!cookie?.refreshToken) throw new Error("No RefreshToken in Cookie");
-  const refreshToken = cookie.refreshToken;
-  const user = await User.findOne({ refreshToken });
-  if (!user) {
-    res.clearCookie("refreshToken", {
-      httpOnly: true,
-      secure: true,
-    });
-    return res.sendStatus(403);
-  }
-  await User.findOneAndUpdate(
-    { refreshToken },
-    {
-      refreshToken: "",
-    }
-  );
-  res.clearCookie("refreshToken", {
-    httpOnly: true,
-    secure: true,
+  res.cookie("refreshToken", "", {
+    expires: new Date(0),
   });
   res.status(200).json("Logout successful");
 });
