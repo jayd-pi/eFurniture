@@ -42,7 +42,7 @@ const viewTransaction = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     validateMongoDbId(id);
-    const transactions = await Transaction.find({ idUser: idUser });
+    const transactions = await Transaction.find({ idUser: id });
     res.status(200).json(transactions);
   } catch (err) {
     return res.status(500).json({ message: "Not found user." });
