@@ -18,3 +18,9 @@
 ### ERD
 ![ed0779c3cbec61b238fd](https://github.com/jayd-pi/eFurniture/assets/95134723/d1bec5f4-0b4e-4b5e-86c1-a7759c077ed2)
 
+### API
+![P](https://github.com/jayd-pi/eFurniture/assets/95134723/ce0d8dd1-0bae-48d2-afeb-4f3611f9f4ae)
+![Vi](https://github.com/jayd-pi/eFurniture/assets/95134723/c0c99f62-29d7-4d72-ba32-841ff8938d64)
+![Vih](https://github.com/jayd-pi/eFurniture/assets/95134723/de3df243-3cd1-4d39-aaa5-8ad872d3fbb4)
+![A](https://github.com/jayd-pi/eFurniture/assets/95134723/938a21c5-27d4-45f1-aa6b-c53171a4f376)
+![Duy](https://github.com/jayd-pi/eFurniture/assets/95134723/c52ef65f-3ded-4ace-a1f4-d6a46f456eb5)
