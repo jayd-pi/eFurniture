@@ -19,14 +19,18 @@ const topUp = asyncHandler(async (req, res) => {
     }).sort({ createdAt: -1 });
     let remain = 0;
     if (latestTransaction) {
-      remain = latestTransaction.remain;
+      remain = parseInt(latestTransaction.remain, 10);
     }
+    let am = parseInt(amount, 10);
+    remain = remain + am;
+    remain = parseInt(remain, 10);
+
     const transaction = new Transaction({
       phone: phone,
       idUser: comment,
       description: "Top up from momo",
       amount: amount,
-      remain: remain + amount,
+      remain: remain,
       Type: "Top up",
       createdAt: new Date(),
     });
