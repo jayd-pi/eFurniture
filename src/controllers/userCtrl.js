@@ -264,7 +264,6 @@ const addToCart = asyncHandler(async (req, res) => {
         let object = {};
         object.product = cart[i]._id;
         object.count = cart[i].count;
-        object.color = cart[i].color;
         let getPrice = await Product.findById(cart[i]._id)
           .select("price")
           .exec();
@@ -274,9 +273,9 @@ const addToCart = asyncHandler(async (req, res) => {
     }
     let cartTotal = 0;
     for (let i = 0; i < alreadyExistCart.products.length; i++) {
-      cartTotal =
-        cartTotal +
+      let subtotal =
         alreadyExistCart.products[i].price * alreadyExistCart.products[i].count;
+      cartTotal += subtotal;
     }
     alreadyExistCart.cartTotal = cartTotal;
     let newCart = await alreadyExistCart.save();
@@ -356,5 +355,5 @@ module.exports = {
   getUserCart,
   emptyCart,
   getWishList,
-  updatePassword
+  updatePassword,
 };
