@@ -14,3 +14,7 @@
     - Để kiểm tra branch hiện tại sử dụng lệnh "git branch"
     - Để chuyển sang branch khác sử dụng lệnh "git checkout [tên branch]"
   - Mọi người chú ý CLEAN project trước khi push để xoá các file ko cần thiết, pull request dễ dàng hơn.
+
+### ERD
+![ed0779c3cbec61b238fd](https://github.com/jayd-pi/eFurniture/assets/95134723/d1bec5f4-0b4e-4b5e-86c1-a7759c077ed2)
+
