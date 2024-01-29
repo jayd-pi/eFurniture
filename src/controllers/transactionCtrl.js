@@ -45,7 +45,7 @@ const viewTransaction = asyncHandler(async (req, res) => {
     const transactions = await Transaction.find({ idUser: idUser });
     res.status(200).json(transactions);
   } catch (err) {
-    return res.status(500).json({ message: "Error." });
+    return res.status(500).json({ message: "Not found user." });
   }
 });
 
