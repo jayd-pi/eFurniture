@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  provider: {
+    type: String,
+    default: "email"
+  },
   email: {
     type: String,
     required: true,
@@ -28,14 +32,19 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
   },
   mobile: {
     type: String,
-    required: true,
-    unique: true,
+    required: () => {
+      return this.provider !== 'email' ? false : true;
+    },
+    unique:() => {
+      return this.provider !== 'email' ? false : true;
+    },
     validate: {
-      validator: validatePhoneNumber,
+      validator: () => {
+        return this.provider !== 'email' ? false : validatePhoneNumber ;
+      },
       message: (props) =>
         `${props.value} is not a valid phone number! Must be 9-11 digits positive number.`,
     },
