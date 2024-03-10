@@ -3,11 +3,16 @@ const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongoId");
 
+const index = asyncHandler(async (req, res) => {
+  try {
+    res.render("index");
+  } catch (error) {}
+});
 //create a product
 const createProduct = asyncHandler(async (req, res) => {
   try {
     const createProduct = await Product.create(req.body);
-    res.json(createProduct);
+    res.redirect("/");
   } catch (err) {
     throw new Error(err);
   }
@@ -21,7 +26,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     const updateProduct = await Product.findByIdAndUpdate(id, req.body, {
       new: true,
     });
-    res.json(updateProduct);
+    res.redirect("/");
   } catch (err) {
     throw new Error(err);
   }
@@ -33,10 +38,10 @@ const deleteProduct = asyncHandler(async (req, res) => {
   validateMongoDbId(id);
   try {
     const deleteProduct = await Product.findByIdAndDelete(id);
-    res.json(deleteProduct);
   } catch (error) {
     throw new Error(error);
   }
+  res.redirect("/");
 });
 
 //get a Product
@@ -45,6 +50,9 @@ const getaProduct = asyncHandler(async (req, res) => {
   validateMongoDbId(id);
   try {
     const findProduct = await Product.findById(id);
+    res.render("edit", {
+      product: findProduct,
+    });
     res.json(findProduct);
   } catch (error) {
     throw new Error(error);
@@ -85,7 +93,9 @@ const getAllProduct = asyncHandler(async (req, res) => {
     }
 
     const product = await query;
-    res.json(product);
+    res.render("index", {
+      products: product,
+    });
   } catch (error) {
     throw new Error(error);
   }
@@ -137,4 +147,5 @@ module.exports = {
   getaProduct,
   getAllProduct,
   addToWishlist,
+  index,
 };

@@ -7,6 +7,14 @@ const validateMongoDbId = require("../utils/validateMongoId");
 const { generateToken } = require("../config/jwtToken");
 const { generateRefreshToken } = require("../config/generateRefreshToken");
 
+//login page
+
+const loginForm = asyncHandler(async (req, res) => {
+  try {
+    res.render("login", { msg: "Welcome" });
+  } catch (error) {}
+});
+
 //Register account
 
 const createUser = asyncHandler(async (req, res) => {
@@ -64,32 +72,43 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 
 const loginAdmin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  // check if user exists or not
-  const findAdmin = await User.findOne({ email });
-  if (findAdmin.isAdmin === true) throw new Error("Not Authorised");
-  if (findAdmin && (await findAdmin.isPasswordMatched(password))) {
-    const refreshToken = await generateRefreshToken(findAdmin?._id);
-    const updateuser = await User.findByIdAndUpdate(
-      findAdmin.id,
-      {
-        refreshToken: refreshToken,
-      },
-      { new: true }
-    );
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      maxAge: 72 * 60 * 60 * 1000,
-    });
-    res.json({
-      _id: findAdmin?._id,
-      firstname: findAdmin?.firstname,
-      lastname: findAdmin?.lastname,
-      email: findAdmin?.email,
-      mobile: findAdmin?.mobile,
-      token: generateToken(findAdmin?._id),
-    });
-  } else {
-    throw new Error("Invalid Credentials");
+
+  try {
+    // Check if user exists or not
+    const findAdmin = await User.findOne({ email });
+
+    if (!findAdmin || findAdmin.isAdmin !== true) {
+      res.render("login", { msg: "you are not admin" });
+    }
+
+    if (await findAdmin.isPasswordMatched(password)) {
+      // Generate refresh token
+      const refreshToken = await generateRefreshToken(findAdmin._id);
+      const token = generateToken(findAdmin._id); // Tạo token
+      res.cookie("token", token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000, // 24 giờ
+      });
+
+      // Update user with refresh token
+      await User.findByIdAndUpdate(
+        findAdmin.id,
+        { refreshToken: refreshToken },
+        { new: true }
+      );
+
+      // Set cookie with refresh token
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        maxAge: 72 * 60 * 60 * 1000,
+      });
+
+      res.redirect("/");
+    } else {
+      res.render("login", { msg: "Password not true" });
+    }
+  } catch (error) {
+    res.render("login", { msg: error.message });
   }
 });
 
@@ -113,28 +132,14 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
 // logout
 
 const logout = asyncHandler(async (req, res) => {
-  const cookie = req.cookies;
-  if (!cookie?.refreshToken) throw new Error("No RefreshToken in Cookie");
-  const refreshToken = cookie.refreshToken;
-  const user = await User.findOne({ refreshToken });
-  if (!user) {
-    res.clearCookie("refreshToken", {
+  const cookies = req.cookies;
+  Object.keys(cookies).forEach((cookie) => {
+    res.clearCookie(cookie, {
       httpOnly: true,
       secure: true,
     });
-    return res.sendStatus(403);
-  }
-  await User.findOneAndUpdate(
-    { refreshToken },
-    {
-      refreshToken: "",
-    }
-  );
-  res.clearCookie("refreshToken", {
-    httpOnly: true,
-    secure: true,
   });
-  res.status(200).json("Logout successful");
+  res.redirect("/login");
 });
 
 //get all users
@@ -365,4 +370,5 @@ module.exports = {
   emptyCart,
   getWishList,
   updatePassword,
+  loginForm,
 };
