@@ -53,7 +53,7 @@ const userSchema = new mongoose.Schema({
   },
   isAdmin: {
     type: Boolean,
-    required: true,
+    // required: true,
     default: false,
   },
   isBlocked: {
@@ -67,6 +67,10 @@ const userSchema = new mongoose.Schema({
   gender: {
     type: String,
     enum: ["male", "female", "other"],
+  },
+  wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+  refreshToken: {
+    type: String,
   },
 });
 //bcrypt password

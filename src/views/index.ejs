@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <a href="/logout" class="btn btn-danger">Logout</a>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add product</button>
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Add product</h5>
+            </div>
+            <div class="modal-body">
+              <form method="POST">
+                <div class="mb-3">
+                  <label for="productName" class="form-label">Product Name</label>
+                  <input type="text" class="form-control" id="productName" name="productName" placeholder="Input product Name" required>
+                  <label for="description" class="form-label">Description</label>
+                  <input type="text" class="form-control" id="description" name="description" placeholder="Input description" required>
+                  <label for="category" class="form-label">Category</label>
+                  <input type="text" class="form-control" id="category" name="category" placeholder="Input category" required>
+                  <label for="price" class="form-label">Price</label>
+                  <input type="number" class="form-control" id="price" name="price" placeholder="Input price" required>
+                  <label for="stockQuantity" class="form-label">Stock Quantity</label>
+                  <input type="number" class="form-control" id="stockQuantity" name="stockQuantity" placeholder="Input stockQuantity" required>
+                  <label for="images" class="form-label">Images</label>
+                  <input type="text" class="form-control" id="images" name="images" placeholder="Input images" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <table class="table table-bordered table-striped table-hover" style="margin-top: 1rem">
+        <thead>
+          <tr>
+            <th scope="col">Product Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Category</th>
+            <th scope="col">Price</th>
+            <th scope="col">Stock Quantity</th>
+            <th scope="col">Images</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% products.forEach(function(products, index){ %>
+          <tr>
+            <td><%= products.productName %></td>
+            <td><%= products.description %></td>
+            <td><%= products.category %></td>
+            <td><%= products.price %></td>
+            <td><%= products.stockQuantity %></td>
+            <td>
+              <img src="<%= products.images %>" alt="Product Image" class="img-fluid" style="max-width: 100px; height: auto">
+            </td>
+            <td>
+              <div id="actionButton<%= index %>">
+                <a href="/delete/<%= products._id %>" class="btn btn-danger" onclick="return confirm('Confirm to delete?')">Delete</a>
+                <a href="/edit/<%= products._id %>" class="btn btn-warning">Edit</a>
+              </div>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
