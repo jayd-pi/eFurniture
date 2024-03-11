@@ -10,6 +10,7 @@ const dbConnect = require("./config/dbConnect");
 const userRouter = require("./routes/userRoutes");
 const productRouter = require("./routes/productRoutes");
 const ui = require("./routes");
+const couponRouter = require("./routes/couponRoutes");
 
 app.set("views", "views");
 app.set("view engine", "ejs");
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/product", productRouter);
+app.use("/api/v1/coupon", couponRouter);
 app.use("/", ui);
 app.use(notFound);
 app.use(errorHandler);

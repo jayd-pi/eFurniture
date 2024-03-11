@@ -15,87 +15,45 @@
       <div class="col-md-6">
         <form method="POST">
           <div class="mb-3">
-            <label for="productName" class="form-label">product Name</label>
+            <label for="name" class="form-label">Coupon Name</label>
             <input
               type="text"
               class="form-control"
-              id="productName"
-              name="productName"
+              id="name"
+              name="name"
               placeholder="Input name"
               required
-              value="<%= product.productName %>"
+              value="<%= coupon.name %>"
               onblur="trimInput()"
             />
           </div>
           <div class="mb-3">
-            <label for="productDescription" class="form-label"
-              >product Description</label
-            >
+            <label for="expiry" class="form-label">Expiry</label>
             <input
-              type="text"
+              type="date"
               class="form-control"
-              id="description"
-              name="description"
-              placeholder="Input description"
+              id="expiry"
+              name="expiry"
+              placeholder="Input expiry"
               required
-              value="<%= product.description %>"
+              value="<%= coupon.expiry %>"
               onblur="trimInput()"
             />
           </div>
           <div class="mb-3">
-            <label for="category" class="form-label">product category</label>
-            <input
-              type="text"
-              class="form-control"
-              id="category"
-              name="category"
-              placeholder="Input category"
-              required
-              value="<%= product.category %>"
-              onblur="trimInput()"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="price" class="form-label">product price</label>
+            <label for="category" class="form-label">Discount</label>
             <input
               type="number"
               class="form-control"
-              id="price"
-              name="price"
-              placeholder="Input price"
+              id="discount"
+              name="discount"
+              placeholder="Input Discount"
               required
-              value="<%= product.price %>"
+              value="<%= coupon.discount %>"
               onblur="trimInput()"
             />
           </div>
-          <div class="mb-3">
-            <label for="stockQuantity" class="form-label"
-              >product stockQuantity</label
-            >
-            <input
-              type="number"
-              class="form-control"
-              id="stockQuantity"
-              name="stockQuantity"
-              placeholder="Input stockQuantity"
-              required
-              value="<%= product.stockQuantity %>"
-              onblur="trimInput()"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="images" class="form-label">product images</label>
-            <input
-              type="text"
-              class="form-control"
-              id="images"
-              name="images"
-              placeholder="Input images"
-              required
-              value="<%= product.images %>"
-              onblur="trimInput()"
-            />
-          </div>
+
           <div class="d-grid">
             <button class="btn btn-primary" type="submit">Submit</button>
           </div>

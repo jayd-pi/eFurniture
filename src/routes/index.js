@@ -15,17 +15,18 @@ const {
   loginUserCtrl,
   logout,
 } = require("../controllers/userCtrl");
+const { getAllCoupon, createCoupon, deleteCoupon, getaCoupon, updateCoupon } = require("../controllers/couponCtrl");
 const router = express.Router();
 
 router.get("/login", loginForm);
 router.post("/login", loginAdmin);
 
-router.get("/", authMiddleware, isAdmin, getAllProduct);
-router.post("/", authMiddleware, isAdmin, createProduct);
+router.get("/", authMiddleware, isAdmin, getAllCoupon);
+router.post("/", authMiddleware, isAdmin, createCoupon);
 
 router.get("/logout", authMiddleware, isAdmin, logout);
 
-router.get("/delete/:id", authMiddleware, isAdmin, deleteProduct);
-router.get("/edit/:id", authMiddleware, isAdmin, getaProduct);
-router.post("/edit/:id", authMiddleware, isAdmin, updateProduct);
+router.get("/delete/:id", authMiddleware, isAdmin, deleteCoupon);
+router.get("/edit/:id", authMiddleware, isAdmin, getaCoupon);
+router.post("/edit/:id", authMiddleware, isAdmin, updateCoupon);
 module.exports = router;
