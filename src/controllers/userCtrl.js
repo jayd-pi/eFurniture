@@ -79,7 +79,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
     const findAdmin = await User.findOne({ email });
 
     if (!findAdmin || findAdmin.isAdmin !== true) {
-      res.render("login", { msg: "you are not admin" });
+      res.render("login", { msg: "You are not admin" });
     }
 
     if (await findAdmin.isPasswordMatched(password)) {
