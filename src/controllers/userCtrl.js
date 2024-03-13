@@ -17,7 +17,6 @@ const loginForm = asyncHandler(async (req, res) => {
 
 //Register account
 
-
 const createUser = asyncHandler(async (req, res) => {
   try {
     const { email } = req.body;

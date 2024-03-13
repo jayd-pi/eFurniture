@@ -12,7 +12,6 @@ const {
 const {
   loginForm,
   loginAdmin,
-  loginUserCtrl,
   logout,
 } = require("../controllers/userCtrl");
 const { getAllCoupon, createCoupon, deleteCoupon, getaCoupon, updateCoupon } = require("../controllers/couponCtrl");
