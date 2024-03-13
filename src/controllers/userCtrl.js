@@ -78,7 +78,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
     const findAdmin = await User.findOne({ email });
 
     if (!findAdmin || findAdmin.isAdmin !== true) {
-      res.render("login", { msg: "you are not admin" });
+      res.render("login", { msg: "You are not admin" });
     }
 
     if (await findAdmin.isPasswordMatched(password)) {
@@ -115,7 +115,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
 //handle RefreshToken
 
 const handleRefreshToken = asyncHandler(async (req, res) => {
-  const cookie = req.cookies;
+  const cookie = req.cookies.refreshToken;
   if (!cookie?.refreshToken) throw new Error("No RefreshToken in Cookie");
   const refreshToken = cookie.refreshToken;
   const user = await User.findOne({ refreshToken });
@@ -353,6 +353,22 @@ const updatePassword = asyncHandler(async (req, res) => {
   }
 });
 
+//get order
+
+const getOrders = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  validateMongoDbId(_id);
+  try {
+    const userOrders = await Order.findOne({ orderby: _id })
+      .populate("products.product")
+      .populate("orderby")
+      .exec();
+    res.json(userOrders);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 module.exports = {
   createUser,
   loginUserCtrl,
@@ -371,4 +387,5 @@ module.exports = {
   getWishList,
   updatePassword,
   loginForm,
+  getOrders
 };
